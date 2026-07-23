@@ -1,0 +1,11 @@
+Which keyword is used to define a function in Python?,func,define,def,function,3
+What is the correct file extension for Python files?,.py,.pyt,.pt,.p,1
+Which data type is mutable in Python?,tuple,string,list,integer,3
+What does len("Python") return?,5,6,7,None,2
+How do you start a single-line comment in Python?,//,#,/*,<!--,2
+Which method adds an element to the end of a list?,add(),append(),extend(),insert(),2
+What is the output of 3 * 3 in Python?,6,9,27,81,2
+Which statement stops the current loop iteration and moves to the next?,stop,break,exit,continue,4
+How do you convert a string "10" into an integer?,int("10"),str(10),float("10"),cast("10"),1
+What will type(4.5) return?,<class 'int'>,<class 'str'>,<class 'float'>,<class 'list'>,3
+
