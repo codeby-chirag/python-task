@@ -78,8 +78,6 @@ def sort_folder(directory_path):
             target_folder = dir_path / month_name / week_folder_name
             target_folder.mkdir(parents=True, exist_ok=True)
             
-            # Move the folder into its new location
-            # (Changed variable names from 'file' to 'folder' to match what it actually is)
             new_folder_location = target_folder / full_folder_path.name
             full_folder_path.rename(new_folder_location)
             
