@@ -1,83 +1,64 @@
 import argparse
+import os
+
+import compress_stuff
 import file_manager
+import sort_file
 
 
 def main():
 
-    parser = argparse.ArgumentParser(
-        description="Custom File Manager"
-    )
+    parser = argparse.ArgumentParser(description="Custom File Manager")
 
     # List operations
     parser.add_argument(
-        "--list",
-        action="store_true",
-        help="List all files and folders"
-    )
-
-    parser.add_argument(
-        "--list-files",
-        action="store_true",
-        help="List only files"
-    )
-
-    parser.add_argument(
-        "--list-folder",
-        action="store_true",
-        help="List only folders"
+        "--list", action="store_true", help="List all files and folders"
     )
 
     # Move operation
-    parser.add_argument(
-        "--move",
-        action="store_true",
-        help="Move file or folder"
-    )
+    parser.add_argument("--move", action="store_true", help="Move file or folder")
     # Copy operation
-    parser.add_argument(
-        "--copy",
-        action="store_true",
-        help="copy file or folder"
-    )
+    parser.add_argument("--copy", action="store_true", help="copy file or folder")
     # Delete
+    parser.add_argument("--delete", action="store_true", help="delete file")
+    # Sort
+    parser.add_argument("--sort", action="store_true", help="sort the file or folder")
+    # Compress
+    parser.add_argument("--compress", action="store_true", help="Compress folders")
     parser.add_argument(
-        "--delete",
-        action="store_true",
-        help="delete file"
+        "--filename", action="store_true", help="new file name which you want to give"
     )
+    parser.add_argument("--decompress", action="store_true", help="DeCompress folders")
 
     # File, Folder and Destination Path
     parser.add_argument(
-        "--file",
-        type=str,
-        help="File path"
+        "--file", action="store_true", help="Perform operation on files"
     )
 
     parser.add_argument(
-        "--folder",
-        type=str,
-        help="Folder path"
+        "--folder", action="store_true", help="Perform operation on folders"
     )
 
-    parser.add_argument(
-        "--destination",
-        type=str,
-        help="Destination path"
-    )
+    parser.add_argument("--path", type=str, help="Path of file or folder")
+
+    parser.add_argument("--destination", type=str, help="Destination path")
 
     args = parser.parse_args()
 
-    current_dir_path = "/home/chirag/Python Task/File Task 7"
+    # current_dir_path = "/home/chirag/Python Task/File Task 7"
+    directory = args.path if args.path else os.getcwd()
 
     # Listing
     if args.list:
-        file_manager.current_dir(current_dir_path)
 
-    elif args.list_files:
-        file_manager.curr_dir_file(current_dir_path)
+        if args.file:
+            file_manager.curr_dir_file(directory)
 
-    elif args.list_folder:
-        file_manager.curr_dir_folder(current_dir_path)
+        elif args.folder:
+            file_manager.curr_dir_folder(directory)
+
+        else:
+            file_manager.current_dir(directory)
 
     # Moving
     elif args.move:
@@ -85,20 +66,16 @@ def main():
         if not args.destination:
             parser.error("--destination is required.")
 
+        if not args.path:
+            parser.error("--path is required.")
+
         if args.file:
-            file_manager.move_file(
-                args.file,
-                args.destination
-            )
+            file_manager.move_file(args.path, args.destination)
+
         elif args.folder:
-            file_manager.move_folder(
-                args.folder,
-                args.destination
-            )
+            file_manager.move_folder(args.path, args.destination)
         else:
-            parser.error(
-                "Use either --file or --folder with --move."
-            )
+            parser.error("Use either --file or --folder with --move.")
 
     # Copy
     elif args.copy:
@@ -106,31 +83,54 @@ def main():
         if not args.destination:
             parser.error("--destination is required.")
 
-        if args.file:
-            file_manager.copy_file(
-                args.file,
-                args.destination
-            )
-        elif args.folder:
-            file_manager.copy_folder(
-                args.folder,
-                args.destination
-            )
-        else:
-            parser.error(
-                "Use either --file or --folder with --copy."
-            )
+        if not args.path:
+            parser.error("--path is required.")
 
+        if args.file:
+            file_manager.copy_file(args.path, args.destination)
+
+        elif args.folder:
+            file_manager.copy_folder(args.path, args.destination)
+        else:
+            parser.error("Use either --file or --folder with --copy.")
+
+    # Delete
     elif args.delete:
 
         if args.folder:
-            print("Folder cant't be deleted")
+            print("Folder can't be deleted")
+
         elif args.file:
-            file_manager.delete_file(
-                args.file
-            )
+
+            if not args.path:
+                parser.error("--path is required.")
+
+            file_manager.delete_file(args.path)
         else:
             print("User must with --file")
+
+    # Sorting
+    elif args.sort:
+
+        if not args.path:
+            parser.error("--path is required.")
+
+        if args.file:
+            sort_file.sort_file(args.path)
+
+        elif args.folder:
+            sort_file.sort_folder(args.path)
+        else:
+            parser.error("Use either --file or --folder with --sort")
+
+    # Compress
+    elif args.compress:
+        compress_stuff.compress_file(args.path)
+    
+    # Decompress
+    elif args.decompress:
+        compress_stuff.decompress_file(args.path)
+
 
 if __name__ == "__main__":
     main()

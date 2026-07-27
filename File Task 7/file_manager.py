@@ -43,7 +43,7 @@ def move_file(source, destination):
             shutil.move(file_path, dst_path)
             print(f"Moved: {file_path} -> {dst_path}")
 
-    except Exception as e:
+    except Exception as e: 
         print(f"Error: {e}")
 
 
@@ -130,6 +130,7 @@ def delete_file(source):
         for file in allfile:
             if os.path.isdir(os.path.join(source)):
                 print(f"{source} is a folder and can't be delete")
+                
         else:        
             os.remove(file)
             print(f"File delete from -> {source}")
@@ -137,5 +138,4 @@ def delete_file(source):
     except Exception as e:
             print(f"Error: {e}")
 
-# Sort command which SORT and make directory and move into that directory
 
