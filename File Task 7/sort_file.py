@@ -73,7 +73,7 @@ def sort_folder(directory_path):
                 continue
 
             timestamp = full_folder_path.stat().st_mtime
-            file_date = datetime.fromtimestamp(timestamp)  # noqa: DTZ006
+            file_date = datetime.fromtimestamp(timestamp)
 
             # Get Month name and Day number
             month_name = file_date.strftime("%B")
@@ -87,6 +87,7 @@ def sort_folder(directory_path):
             target_folder.mkdir(parents=True, exist_ok=True)
 
             # Move the folder into its new location
+
             new_folder_location = target_folder / full_folder_path.name
             full_folder_path.rename(new_folder_location)
 
