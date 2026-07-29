@@ -5,26 +5,60 @@ import os
 import shutil
 
 
+def validate_directory(path):
+    if not os.path.exists(path):
+        print(f"Error: '{path}' does not exist.")
+        return False
+
+    if not os.path.isdir(path):
+        print(f"Error: '{path}' is not a directory.")
+        return False
+
+    return True
+
 def current_dir(path):
     """List everything inside directory."""
+    if not validate_directory(path):
+        return
+
     print(os.listdir(path))
 
 
 def curr_dir_file(path):
     """List files inside directory."""
+    if not validate_directory(path):
+        return
+    
     files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
-    print(files)
+    if files:
+        print(files)
+    else:
+        print("No file found.")
 
 
 def curr_dir_folder(path):
     """List folder inside directory."""
+    if not validate_directory(path):
+        return
+    
     folders = [f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]
-    print(folders)
+    if  folders:
+        print(folders)
+    else:
+        print("No folder found.")
 
 
 def move_file(source, destination):
     """Move files from one directory other directory."""
     try:
+        if not os.path.exists(destination):
+            print(f"Error: '{destination}' does not exist.")
+            return
+
+        if not os.path.isfile(destination):
+            print(f"Error: '{destination}' is not a file.")
+            return
+        
         allfiles = glob.glob(source)
 
         if not allfiles:
@@ -51,6 +85,14 @@ def move_file(source, destination):
 def move_folder(source, destination):
     """Move folder from one directory other directory."""
     try:
+        if not os.path.exists(destination):
+            print(f"Error: '{destination}' does not exist.")
+            return
+
+        if not os.path.isdir(destination):
+            print(f"Error: '{destination}' is not a directory.")
+            return
+        
         allfolders = glob.glob(source)
 
         if not allfolders:
@@ -75,6 +117,14 @@ def move_folder(source, destination):
 def copy_file(source, destination):
     """Copy file from one directory other directory."""
     try:
+        if not os.path.exists(destination):
+            print(f"Error: '{destination}' does not exist.")
+            return
+
+        if not os.path.isfile(destination):
+            print(f"Error: '{destination}' is not a directory.")
+            return
+                
         allfiles = glob.glob(source)
 
         if not allfiles:
@@ -99,6 +149,14 @@ def copy_file(source, destination):
 def copy_folder(source, destination):
     """Copy folder from one directory other directory."""
     try:
+        if not os.path.exists(destination):
+            print(f"Error: '{destination}' does not exist.")
+            return
+
+        if not os.path.isdir(destination):
+            print(f"Error: '{destination}' is not a directory.")
+            return
+        
         allfolders = glob.glob(source)
 
         if not allfolders:
