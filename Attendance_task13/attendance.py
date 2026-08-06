@@ -1,4 +1,6 @@
 import random
+import re
+from datetime import datetime
 
 
 class SchoolManagementSystem:
@@ -106,6 +108,35 @@ class Attendance:
 
 my_school = SchoolManagementSystem()
 
+def validate_name(name):
+    pattern = r"^[A-Za-z\s'-]+$"
+    
+    if re.match(pattern, name):
+        return name
+    print("Enter valid name with only alphabates.")
+    valid_name = input("Enter Name: ")
+    return validate_name(valid_name)
+
+def validate_status(status):
+    while True:
+        status = status.strip().title()
+        
+        if status == "Present" or status == "Absent":
+            return status
+            
+        print("Enter valid status 'Present' or 'Absent' only.")
+        status = input("Enter student status: ")
+
+def validate_date(date_string):
+    while True:
+        try:
+            datetime.strptime(date_string.strip(), "%d-%m-%Y")  # noqa: DTZ007
+            return date_string.strip()
+        except ValueError:
+            print("Enter valid date in DD-MM-YYYY format only (e.g., 06-08-2026).")
+            date_string = input("Enter date: ")
+            
+    
 while True:
     print("""\nChoice Operation:
     1. Add Student
@@ -119,7 +150,8 @@ while True:
     
     if choice == "1":
         student_name = input("Enter name of student: ")
-        
+        valid_student_name = validate_name(student_name)
+                
         student_id = 220 + random.randint(0, 9999)
         while student_id in my_school.students:
             student_id = 220 + random.randint(0, 9999)
@@ -130,17 +162,21 @@ while True:
             student_rollno = int(input("Enter student roll number: "))
         except ValueError:
             print("Invalid roll number format. Defaulting to 0.")
-            student_rollno = 0
+            continue
         my_school.add_student(student_name, student_id, student_class, student_rollno)
         
     elif choice == "2":
         teacher_name = input("Enter name of teacher: ")
+        valid_teacher_name = validate_name(teacher_name)
+        
         teacher_id = 220 + random.randint(0, 9999)
 
         while teacher_id in my_school.teachers:
             teacher_id = 220 + random.randint(0, 9999)
             
-        teacher_subject_taught = input("Enter subject of teacher: ")       
+        subject = input("Enter subject of teacher: ")   
+        teacher_subject_taught = validate_name(subject)
+            
         my_school.add_teacher(teacher_name, teacher_id, teacher_subject_taught)
         
     elif choice == "3":
@@ -151,12 +187,15 @@ while True:
         print(f"Subject Taught: {teacher_obj.get_subject()}") 
                 
         verified_student_id = my_school.get_verified_id("Student")
-        print("\nStudent id verified!")
+        print("Student id verified!")
         
         date = input("\nEnter date (DD-MM-YYYY): ")
-        status = input("Enter status (Present/Absent): ").strip().title()
+        valid_date = validate_date(date)
         
-        my_school.mark_attendance(verified_student_id, date, status)
+        status = input("Enter status (Present/Absent): ").strip().title()
+        valid_status = validate_status(status)
+        
+        my_school.mark_attendance(verified_student_id, date, valid_status)
         
     elif choice == "4":
         student_id = my_school.get_verified_id("Student")

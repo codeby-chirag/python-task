@@ -1,6 +1,5 @@
 """Do the operations for file and folder like list, move, copy, delete."""
 
-import glob
 import os
 import shutil
 
@@ -55,29 +54,24 @@ def move_file(source, destination):
             print(f"Error: '{destination}' does not exist.")
             return
 
-        if not os.path.isfile(destination):
-            print(f"Error: '{destination}' is not a file.")
+        if not os.path.isdir(destination):
+            print(f"Error: '{destination}' is not a directory.")
             return
         
-        allfiles = glob.glob(source)
-
-        if not allfiles:
+        if not os.path.exists(source):
             print(f"No file matched: {source}")
             return
 
+        if not os.path.isfile(source):
+            print(f"{source} is not File")
+            return
+
         destination = os.path.abspath(destination)
+        dst_path = os.path.join(destination, os.path.basename(source))
 
-        for file_path in allfiles:
-
-            if not os.path.isfile(file_path):
-                print(f"{source} is not File")
-                continue
-
-            dst_path = os.path.join(destination, os.path.basename(file_path))
-
-            shutil.move(file_path, dst_path)
-            print(f"Moved: {file_path} -> {dst_path}")
-
+        shutil.move(source, dst_path)
+        print(f"Moved: {source} -> {dst_path}")
+        
     except OSError as e:  # Fixed W0718
         print(f"Error: {e}")
 
@@ -93,22 +87,18 @@ def move_folder(source, destination):
             print(f"Error: '{destination}' is not a directory.")
             return
         
-        allfolders = glob.glob(source)
-
-        if not allfolders:
+        if not os.path.exists(source):
             print(f"No folder matched: {source}")
             return
 
-        for folder_path in allfolders:
+        if not os.path.isdir(source):
+            print(f"{source} is not Folder")
+            return
 
-            if not os.path.isdir(folder_path):
-                print(f"{source} is not Folder")
-                continue
+        dst_path = os.path.join(destination, os.path.basename(source))
 
-            dst_path = os.path.join(destination, os.path.basename(folder_path))
-
-            shutil.move(folder_path, dst_path)
-            print(f"Moved: {folder_path} -> {dst_path}")
+        shutil.move(source, dst_path)
+        print(f"Moved: {source} -> {dst_path}")
 
     except OSError as e:  # Fixed W0718
         print(f"Error: {e}")
@@ -121,26 +111,22 @@ def copy_file(source, destination):
             print(f"Error: '{destination}' does not exist.")
             return
 
-        if not os.path.isfile(destination):
+        if not os.path.isdir(destination):
             print(f"Error: '{destination}' is not a directory.")
             return
                 
-        allfiles = glob.glob(source)
-
-        if not allfiles:
+        if not os.path.exists(source):
             print(f"No file matched: {source}")
             return
 
-        for file_path in allfiles:
+        if not os.path.isfile(source):
+            print(f"{source} is not File")
+            return
 
-            if not os.path.isfile(file_path):
-                print(f"{source} is not File")
-                continue
+        dst_path = os.path.join(destination, os.path.basename(source))
 
-            dst_path = os.path.join(destination, os.path.basename(file_path))
-
-            shutil.copy(file_path, dst_path)
-            print(f"Copied: {file_path} -> {dst_path}")
+        shutil.copy(source, dst_path)
+        print(f"Copied: {source} -> {dst_path}")
 
     except OSError as e:  # Fixed W0718
         print(f"Error: {e}")
@@ -157,22 +143,18 @@ def copy_folder(source, destination):
             print(f"Error: '{destination}' is not a directory.")
             return
         
-        allfolders = glob.glob(source)
-
-        if not allfolders:
+        if not os.path.exists(source):
             print(f"No folder matched: {source}")
             return
 
-        for folder_path in allfolders:
+        if not os.path.isdir(source):
+            print(f"{source} is not Folder")
+            return
 
-            if not os.path.isdir(folder_path):
-                print(f"{source} is not Folder")
-                continue
+        dst_path = os.path.join(destination, os.path.basename(source))
 
-            dst_path = os.path.join(destination, os.path.basename(folder_path))
-
-            shutil.copytree(folder_path, dst_path)
-            print(f"Copied: {folder_path} -> {dst_path}")
+        shutil.copytree(source, dst_path)
+        print(f"Copied: {source} -> {dst_path}")
 
     except OSError as e:  # Fixed W0718
         print(f"Error: {e}")
@@ -181,19 +163,16 @@ def copy_folder(source, destination):
 def delete_file(source):
     """Delete file from directory."""
     try:
-        allfile = glob.glob(source)
-
-        if not allfile:
+        if not os.path.exists(source):
             print(f"No file matched: {source}")
             return
 
-        for file in allfile:
-            if os.path.isdir(file):  # Cleaned path resolution
-                print(f"{file} is a folder and can't be deleted")
-                continue
+        if os.path.isdir(source):
+            print(f"{source} is a folder and can't be deleted")
+            return
 
-            os.remove(file)  # Fixed W0120 by bringing code inside loop
-            print(f"File deleted from -> {file}")
+        os.remove(source)
+        print(f"File deleted from -> {source}")
 
     except OSError as e:  # Fixed W0718
         print(f"Error: {e}")
